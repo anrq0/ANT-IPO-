@@ -1,0 +1,9 @@
+{
+  "name": "ant-ipo-watch",
+  "version": "1.0.0",
+  "description": "Veille IA sur l’IPO d’Anthropic (ANT) : graphiques, questions à l’IA, notifications iPhone via ntfy.",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "scripts": { "start": "node server.js", "dev": "node --env-file=.env server.js" }
+}
