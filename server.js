@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const E = process.env;
 const C = {
-  port: +E.PORT || 3000, key: E.GEMINI_API_KEY, model: E.GEMINI_MODEL || "gemini-3.8-flash",
+  port: +E.PORT || 3000, key: E.GEMINI_API_KEY, model: E.GEMINI_MODEL || "gemini-2.5-flash",
   symbol: E.SYMBOL || "ANT", topic: E.NTFY_TOPIC, ntfy: E.NTFY_SERVER || "https://ntfy.sh",
   priceEvery: +E.PRICE_SECONDS || 60, aiEvery: +E.AI_SECONDS || 300,
   move: +E.ALERT_PRICE_PCT || 3, minImp: +E.ALERT_MIN_IMPORTANCE || 4, cooldown: +E.ALERT_COOLDOWN_SECONDS || 600,
