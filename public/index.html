@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Veille ANT">
+<meta name="theme-color" content="#0f1115">
+<title>Veille IPO ANT</title>
+<style>
+:root{--bg:#f4f4f1;--card:#fff;--tx:#17171a;--mut:#6a6a70;--bd:#e4e4de;--up:#128a4f;--dn:#d23b2e;--fl:#9a8420;--ac:#4a5cf0}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#181b21;--tx:#eceae4;--mut:#8f9198;--bd:#2a2e36;--up:#4fd08a;--dn:#ff7b6b;--fl:#e0c860;--ac:#8c9bff}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{max-width:760px;margin:0 auto;padding:18px 14px 50px}
+h1{font-size:24px;margin:0}h2{font-size:16px;margin:0 0 10px}
+.mut{color:var(--mut);font-size:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin:14px 0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{font-size:13px;padding:3px 10px;border-radius:999px;border:1px solid var(--bd);color:var(--mut)}
+.on{color:var(--up);border-color:var(--up)}
+.badge{font-weight:700;padding:4px 12px;border-radius:999px;border:1px solid currentColor}
+.up{color:var(--up)}.dn{color:var(--dn)}.fl{color:var(--fl)}
+.big{font-size:34px;font-weight:700;letter-spacing:-.5px}
+canvas{width:100%!important;max-height:240px}
+input,button{font:inherit}
+input{flex:1;min-width:140px;padding:11px 12px;border:1px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx)}
+button{padding:11px 16px;border:0;border-radius:12px;background:var(--ac);color:#fff;font-weight:600;cursor:pointer}
+button.alt{background:transparent;color:var(--tx);border:1px solid var(--bd)}
+button:disabled{opacity:.5}
+ul{margin:6px 0 0;padding-left:20px}
+.src{display:flex;gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--bd);font-size:14px}
+.src img{width:20px;height:20px;border-radius:5px}
+a{color:var(--ac)}
+#ans{white-space:pre-wrap;margin-top:12px}
+details{border-top:1px solid var(--bd);padding:8px 0}summary{cursor:pointer;font-weight:600}
+.warn{font-size:12px;color:var(--mut);margin-top:20px}
+</style>
+</head>
+<body>
+<main>
+  <h1>📈 Veille IPO <span id="sym"></span></h1>
+  <p class="mut" style="margin:4px 0 10px">Anthropic · Nasdaq · cours, actus et analyse IA en continu</p>
+  <div class="row"><span class="pill" id="cd">…</span><span class="pill" id="pai">IA</span><span class="pill" id="pnt">Notifications</span></div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between"><span class="badge" id="tr">—</span><span class="mut" id="ts"></span></div>
+    <div class="big" id="px" style="margin-top:10px">—</div>
+    <p class="mut" id="evt" style="margin:0 0 8px"></p>
+    <p id="sm" style="margin:0 0 8px">En attente de la première analyse…</p>
+    <strong>Prédiction prudente</strong><p id="pr" style="margin:4px 0 8px"></p>
+    <strong>Risques</strong><ul id="rk"></ul>
+  </div>
+
+  <div class="card">
+    <h2>🗓️ Où en est l’IPO <span class="mut">(infos du 16 nov. 2026, susceptibles de changer)</span></h2>
+    <ul style="padding-left:18px">
+      <li><b>26 oct.</b> : dépôt public du dossier S-1 auprès de la SEC, cotation visée au Nasdaq sous « ANT ».</li>
+      <li><b>10 nov.</b> : fourchette fixée entre 70 et 78 $ par action, pour 825 millions d’actions, soit jusqu’à environ 64 Md$ levés.</li>
+      <li><b>18 nov.</b> : fixation du prix final (peut sortir de la fourchette).</li>
+      <li><b>19 nov.</b> : premiers échanges attendus. Environ 20 % de l’offre viserait les particuliers (selon CNBC).</li>
+    </ul>
+    <p class="mut" style="margin:10px 0 4px">À savoir : le 9 nov., une fourchette de 70 à 80 $ envoyée aux banquiers a été retirée comme inexacte avant la version officielle. La valorisation estimée va d’environ 0,9 à 1,4 billion de dollars selon le calcul (actions en circulation ou dilué).</p>
+    <div class="src"><a href="https://finance.yahoo.com/markets/stocks/articles/anthropic-sets-ipo-price-range-140602411.html" target="_blank" rel="noopener noreferrer">Yahoo Finance : fourchette 70-78 $</a></div>
+    <div class="src"><a href="https://finance.yahoo.com/markets/stocks/articles/anthropic-retracts-reported-70-80-043206772.html" target="_blank" rel="noopener noreferrer">Yahoo Finance : fourchette 70-80 $ retirée</a></div>
+    <div class="src"><a href="https://qz.com/anthropic-ipo-price-range-share-cornerstone-investors-111426" target="_blank" rel="noopener noreferrer">Quartz : investisseurs d’ancrage</a></div>
+  </div>
+
+  <div class="card"><h2>Cours (fourchette d’introduction en pointillés)</h2><canvas id="c1"></canvas><p class="mut" id="n1"></p></div>
+  <div class="card"><h2>Confiance et importance des analyses IA</h2><canvas id="c2"></canvas></div>
+  <div class="card"><h2>Sources et actus</h2><div id="src"><span class="mut">Aucune source pour l’instant.</span></div></div>
+
+  <div class="card">
+    <h2>🎓 Pose ta question au formateur IA</h2>
+    <div class="row"><input id="q" placeholder="Ex : c’est quoi un ordre à cours limité ?" maxlength="500"><button id="ask">Demander</button></div>
+    <div id="ans"></div><div id="asrc"></div>
+  </div>
+
+  <div class="card">
+    <h2>🔔 Notifications iPhone</h2>
+    <p class="mut" style="margin-top:0">Alerte sur les gros événements, les variations rapides et le début de cotation. Voir le README pour activer l’app ntfy.</p>
+    <button class="alt" id="tn">Envoyer une notification de test</button> <span class="mut" id="tm"></span>
+  </div>
+
+  <div class="card"><h2>📚 Mini-cours</h2>
+    <details><summary>Qu’est-ce qu’une IPO ?</summary><p>Une entreprise vend pour la première fois ses actions au public. Avant, elle n’était pas cotée : seuls des investisseurs privés pouvaient en détenir.</p></details>
+    <details><summary>Fourchette et prix final</summary><p>La fourchette (ici 70 à 78 $) est une estimation. Le prix final est fixé la veille de la cotation, selon la demande, et peut sortir de la fourchette. Le cours du premier jour peut être très différent du prix d’introduction.</p></details>
+    <details><summary>Ordre au marché ou à cours limité</summary><p>« Au marché » s’exécute tout de suite à n’importe quel prix. « À cours limité » n’achète qu’à ton prix maximum : plus sûr un jour d’ouverture très volatile.</p></details>
+    <details><summary>Le levier</summary><p>Il multiplie gains et pertes. Avec 100 € à ×5, une baisse de 20 % efface tout. Sans levier, la même baisse coûte 20 €.</p></details>
+  </div>
+  <p class="warn">Informations et analyses générées par IA, sans garantie. Ce n’est pas un conseil en investissement ; la perte en capital est possible. Ne mise que ce que tu peux perdre.</p>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+const $=i=>document.getElementById(i);
+const esc=s=>{const d=document.createElement("div");d.textContent=s??"";return d.innerHTML};
+const L={hausse:["Hausse ↑","up"],baisse:["Baisse ↓","dn"],stable:["Stable →","fl"]};
+const hm=t=>new Date(t).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+let c1,c2,ST;
+function chart(old,id,cfg){if(old)old.destroy();return new Chart($(id),cfg)}
+function links(arr){return arr.map(s=>{let h="";try{h=new URL(s.url).hostname}catch{}
+  const dom=/\./.test(s.title)?s.title:h;
+  return `<div class="src"><img alt="" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(dom)}&sz=64"><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title)}</a></div>`}).join("")}
+async function load(){
+  try{ST=await(await fetch("/api/state")).json()}catch{return}
+  $("sym").textContent=ST.symbol;
+  $("pai").textContent="IA "+(ST.ai?"active":"désactivée");$("pai").className="pill "+(ST.ai?"on":"");
+  $("pnt").textContent="Notifications "+(ST.notif?"actives":"non configurées");$("pnt").className="pill "+(ST.notif?"on":"");
+  const a=ST.analyses.at(-1);
+  if(a){const l=L[a.trend];$("tr").textContent=l[0];$("tr").className="badge "+l[1];
+    $("ts").textContent=`Confiance ${a.conf} % · importance ${a.imp}/5 · ${hm(a.t)}`;
+    $("evt").textContent=a.event;$("sm").textContent=a.summary||"";$("pr").textContent=a.prediction||"";
+    $("rk").innerHTML=a.risks.map(x=>`<li>${esc(x)}</li>`).join("");
+    if(a.sources.length)$("src").innerHTML=links(a.sources)}
+  const p=ST.prices.at(-1);$("px").textContent=p?p.p.toFixed(2)+" $":"Pas encore coté";
+  const col=getComputedStyle(document.body).color;Chart.defaults.color=col;Chart.defaults.borderColor="rgba(128,128,128,.2)";
+  $("c1").hidden=!ST.prices.length;
+  $("n1").textContent=ST.prices.length?"":"Le cours apparaîtra dès la première cotation.";
+  if(ST.prices.length){const lb=ST.prices.map(x=>hm(x.t));
+    c1=chart(c1,"c1",{type:"line",data:{labels:lb,datasets:[
+      {label:"Cours $",data:ST.prices.map(x=>x.p),borderColor:"#4a5cf0",pointRadius:0,tension:.25},
+      {label:"70 $",data:lb.map(()=>ST.range[0]),borderDash:[6,4],pointRadius:0,borderWidth:1,borderColor:"#999"},
+      {label:"78 $",data:lb.map(()=>ST.range[1]),borderDash:[6,4],pointRadius:0,borderWidth:1,borderColor:"#999"}]},
+      options:{animation:false,plugins:{legend:{display:false}}}})}
+  if(ST.analyses.length){c2=chart(c2,"c2",{type:"line",data:{labels:ST.analyses.map(x=>hm(x.t)),datasets:[
+      {label:"Confiance %",data:ST.analyses.map(x=>x.conf),borderColor:"#12a05a",tension:.3,yAxisID:"y"},
+      {label:"Importance /5",data:ST.analyses.map(x=>x.imp),borderColor:"#e0a020",stepped:true,yAxisID:"y2"}]},
+      options:{animation:false,scales:{y:{min:0,max:100},y2:{min:0,max:5,position:"right",grid:{drawOnChartArea:false}}}}})}
+}
+function tick(){if(!ST)return;const d=Date.parse(ST.listing)-Date.now();
+  if(d>0){const h=Math.floor(d/36e5),m=Math.floor(d%36e5/6e4);$("cd").textContent=`Cotation dans ${Math.floor(h/24)} j ${h%24} h ${m} min`}
+  else $("cd").textContent="Cotation ouverte"}
+$("ask").onclick=async()=>{const q=$("q").value.trim();if(!q)return;$("ask").disabled=true;$("ans").textContent="Le formateur réfléchit…";$("asrc").innerHTML="";
+  try{const r=await fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({q})});const d=await r.json();
+    $("ans").textContent=d.answer||d.error||"Pas de réponse";if(d.sources)$("asrc").innerHTML=links(d.sources)}
+  catch{$("ans").textContent="Erreur réseau"}$("ask").disabled=false};
+$("tn").onclick=async()=>{let t=localStorage.getItem("tok")||"";
+  for(let i=0;i<2;i++){const r=await fetch("/api/test-notify",{method:"POST",headers:{"x-admin-token":t}});
+    if(r.status===401){t=prompt("Code admin ?")||"";localStorage.setItem("tok",t);continue}
+    const d=await r.json();$("tm").textContent=r.ok?(d.ok?"Envoyée ✔":"Topic ntfy non configuré"):d.error;break}};
+load();setInterval(load,30000);setInterval(tick,30000);setTimeout(tick,800);
+</script>
+</body>
+</html>
